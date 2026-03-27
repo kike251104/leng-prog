@@ -1,12 +1,10 @@
 # Task Tracker CLI
 
-CLI en **Go** para gestionar tareas. Persisten en `tasks.json` en el directorio actual.
+Implementaciones en **Go** y **Rust** para gestionar las mismas tareas; persisten en `tasks.json` en el directorio desde el que ejecutes el programa.
 
-## Requisitos
+## Versión Go (raíz)
 
-- [Go](https://go.dev/dl/) instalado
-
-## Uso
+CLI en **Go**. Requisito: [Go](https://go.dev/dl/) instalado.
 
 ```bash
 go run task-cli.go add "Buy groceries"
@@ -21,16 +19,28 @@ go run task-cli.go list done
 go run task-cli.go list not-done
 ```
 
-Opcional: compilar un binario:
+Compilar binario:
 
 ```bash
 go build -o task-cli task-cli.go
 ./task-cli list
 ```
 
-## Formato de las tareas
+- Solo biblioteca estándar de Go.
 
-`tasks.json` (se crea solo si no existe):
+## Versión Rust (`rust/`)
+
+CLI equivalente con **solo `std`**. Ver [rust/README.md](rust/README.md).
+
+```bash
+cd rust
+cargo run -- add "Comprar leche"
+cargo run -- list
+```
+
+## Formato de `tasks.json`
+
+El archivo se crea si no existe. Ejemplo:
 
 ```json
 [
@@ -38,14 +48,16 @@ go build -o task-cli task-cli.go
     "id": 1,
     "description": "Buy groceries",
     "status": "todo",
-    "createdAt": "2026-03-27T10:00:00.000Z",
-    "updatedAt": "2026-03-27T10:00:00.000Z"
+    "createdAt": "2026-03-27T10:00:00Z",
+    "updatedAt": "2026-03-27T10:00:00Z"
   }
 ]
 ```
 
+- Estados: `todo`, `in-progress`, `done`.
+- El filtro `not-done` muestra todo lo que no está `done`.
+- En Rust los timestamps se guardan en ISO 8601 UTC (segundos, sufijo `Z`).
+
 ## Notas
 
-- Estados: `todo`, `in-progress`, `done`; el filtro `not-done` muestra todo lo que no está `done`.
-- Solo biblioteca estándar de Go.
-- Errores de comando, argumentos e IDs inválidos se manejan con mensajes claros.
+- Errores de comando, argumentos e IDs inválidos: mensajes claros en stderr y código de salida distinto de cero (en ambas implementaciones).
